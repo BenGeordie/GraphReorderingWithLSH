@@ -24,7 +24,6 @@ def evaluate(title, graph_order, get_adjacent_vectors_fn):
     print(f'Average # overlapping neighbors squared between adjacent nodes: {sum_of_squares / len(graph_order)}')
     print(f'Maximum # overlapping neighbors between adjacent nodes: {max_overlap}')
     print(f'Minimum # overlapping neighbors between adjacent nodes: {min_overlap}')
-    print(f'size of histogram data: {len(histogram_data)}')
     plt.xlabel("# overlapping neighbors between adjacent nodes")
     plt.ylabel("# adjacent node pairs")
     plt.hist(histogram_data, bins=[0, 1, 25, 70, 200])
