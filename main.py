@@ -6,7 +6,7 @@ from EvaluateGraphOrder import evaluate
 
 def main():
     graph = EgoFacebookGraph("facebook_combined.txt").export_arr()
-    grl = GRL(1000000, len(graph))
+    grl = GRL(100000, len(graph))
     rr = RandomReorder(len(graph))
     for i, vec in enumerate(graph):
         grl.insert(i, vec)

@@ -29,6 +29,7 @@ def evaluate(title, graph_order, get_adjacent_vectors_fn):
     plt.hist(histogram_data, bins=[0, 1, 25, 70, 200])
     plt.title(f'{title} bins [0, 1, 25, 70, 200]')
     plt.show()
+    plt.hist(histogram_data, bins=200)
     plt.title(f'{title}')
     plt.show()
 
