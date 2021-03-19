@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def evaluate(title, graph_order, get_adjacent_vectors_fn):
+def evaluate(title, graph_order, get_adjacent_vectors_fn, graph=True):
     total = 0
     sum_of_squares = 0
     max_overlap = 0
@@ -20,16 +20,26 @@ def evaluate(title, graph_order, get_adjacent_vectors_fn):
     print('-' * len(title_str))
     print(title_str)
     print('-' * len(title_str))
+    print(f'Number of adjacent node pairs with 0 overlap: {histogram_data.count(0)}')
     print(f'Average # overlapping neighbors between adjacent nodes: {total / len(graph_order)}')
-    print(f'Average # overlapping neighbors squared between adjacent nodes: {sum_of_squares / len(graph_order)}')
+    print(f'Average # overlapping neighbors RMS between adjacent nodes: {(sum_of_squares / len(graph_order)) ** 0.5}')
     print(f'Maximum # overlapping neighbors between adjacent nodes: {max_overlap}')
     print(f'Minimum # overlapping neighbors between adjacent nodes: {min_overlap}')
-    plt.xlabel("# overlapping neighbors between adjacent nodes")
-    plt.ylabel("# adjacent node pairs")
-    plt.hist(histogram_data, bins=[0, 1, 2, 5, 10, 25, 70, 200])
-    plt.title(f'{title} bins [0, 1, 2, 5, 10, 25, 70, 200]')
-    plt.show()
-    plt.hist(histogram_data, bins=200)
-    plt.title(f'{title}')
-    plt.show()
+    if graph:
+        plt.xlabel("# overlapping neighbors between adjacent nodes")
+        plt.ylabel("# adjacent node pairs")
+        plt.hist(histogram_data, bins=[0, 1, 2, 5, 10, 25, 70, 200])
+        plt.title(f'{title} bins [0, 1, 2, 5, 10, 25, 70, 200]')
+        plt.ylim(0, 1000)
+        plt.xlim(0, 175)
+        plt.yticks([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000])
+        plt.show()
+        plt.xlabel("# overlapping neighbors between adjacent nodes")
+        plt.ylabel("# adjacent node pairs")
+        plt.hist(histogram_data, bins=210)
+        plt.title(f'{title}')
+        plt.ylim(0, 1000)
+        plt.xlim(0, 200)
+        plt.yticks([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000])
+        plt.show()
 
