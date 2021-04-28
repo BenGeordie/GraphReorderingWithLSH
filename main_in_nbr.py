@@ -70,6 +70,7 @@ class NoOp:
         return list(range(self.n_nodes))
 
 
+# Yo
 def main():
     graph = EgoFacebookGraph("facebook_combined.txt").export_arr()
     test(graph, "No Op", NoOp, len(graph))
