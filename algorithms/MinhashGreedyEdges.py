@@ -1,10 +1,11 @@
 import numpy as np
 import mmh3
+import math
 import sys
 from collections import defaultdict
 
 
-class GROWLSE:
+class MinhashGreedyEdges:
     def __init__(self, l_tables, k_concat, n_nodes, seed=100):
         self.numedges = 0
         # Save parameters
@@ -35,8 +36,8 @@ class GROWLSE:
         self.orig_node_at_idx = np.full(self.n_nodes, 0)
         self.made_order = False
 
-        self.GOrder_comps = 0
-        self.GROWLSE_comps = 0
+        self.pairwise_collisions = 0
+        self.m_hat = 0
 
     def __make_hash_fn(self, i):
         return lambda item: mmh3.hash(str(item), seed=self.seed * i, signed=False)
@@ -52,7 +53,6 @@ class GROWLSE:
     def insert(self, u, vector):
         for v in vector:
             self.insert_edge(u, v)
-        self.GOrder_comps += len(vector) ** 2
 
     # Step 2
     def __build_hash_table(self):
@@ -68,9 +68,9 @@ class GROWLSE:
                 if len(bucket) > 0:
                     for i in bucket:
                         for j in bucket:
+                            self.pairwise_collisions += 1
                             if i < j:
                                 self.sparse_graph[i][j][0] += 1
-                                self.GROWLSE_comps += 1
         for u in self.sparse_graph:
             for v in self.sparse_graph[u]:
                 jac = self.sparse_graph[u][v][0] / self.num_tables
@@ -88,8 +88,7 @@ class GROWLSE:
                     weight, _ = self.sparse_graph[u][v]
                     self.edges.append((u, v, weight))
         self.edges.sort(key=lambda edge: edge[2], reverse=True)
-        print("NUMBER OF EDGES IN ORIGINAL GRAPH:", self.numedges)
-        print("NUMBER OF EDGES:", len(self.edges))
+        self.m_hat = len(self.edges)
 
     # Step 5
     def __filter_edges(self):
@@ -110,8 +109,6 @@ class GROWLSE:
         self.__build_sparse_graph()
         self.__sort_sparse_graph_edges_by_weight()
         self.__filter_edges()
-        print("GOrder comps:", self.GOrder_comps)
-        print("GROWLSE comps:", self.GROWLSE_comps)
         start_node = 0
         idx = 0
         while idx < self.n_nodes:
@@ -149,6 +146,11 @@ class GROWLSE:
             start_node += 1
 
         return self.orig_node_at_idx
+
+    def get_operation_count(self):
+        p = self.pairwise_collisions
+        m = self.m_hat
+        return math.floor(p + m * math.log(m, 2))
 
 
 

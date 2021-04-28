@@ -1,6 +1,5 @@
 from collections import defaultdict
-
-from MinHash import Hash
+import math
 import numpy
 import sys
 import mmh3
@@ -14,7 +13,7 @@ class Mmh3:
         return mmh3.hash(str(item), seed=self.seed)
 
 
-class GRL2InNbr3Min:
+class MinhashSortingK3:
     def __init__(self, n_nodes, seed=100):
         self.n_nodes = n_nodes
         self.hasher1 = Mmh3(seed=seed)
@@ -25,7 +24,10 @@ class GRL2InNbr3Min:
         self.order_arr = [[sys.maxsize, sys.maxsize, sys.maxsize] for _ in range(n_nodes)]
         self.order_arr_str = ["a" * 102] * n_nodes
 
+        self.m = 0
+
     def insert(self, vec_id, vector):
+        self.m += len(vector)
         hash1 = self.hasher1.get_hash(vec_id)
         hash2 = self.hasher2.get_hash(vec_id)
         hash3 = self.hasher3.get_hash(vec_id)
@@ -51,10 +53,6 @@ class GRL2InNbr3Min:
         sort_index = numpy.argsort(s)
         return sort_index
 
-# TODO: New idea: implement Ben's reordering mincut thing with minhash;
-#  This means we use minhash to split the graph into partitions
-#  Then we reorder each partition, probably with a stricter set of minhash
-#  Then we reorder summaries of the partitions, maybe with another set of minhash.
-
-
+    def get_operation_count(self):
+        return math.floor(self.m + self.n_nodes * math.log(self.n_nodes, 2))
 

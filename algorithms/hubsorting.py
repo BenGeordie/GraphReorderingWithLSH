@@ -1,12 +1,17 @@
+import math
+
+
 class HubSorting:
     def __init__(self, n_nodes):
         self.n_nodes = n_nodes
         self.degrees = [0 for _ in range(self.n_nodes)]
         self.total_deg = 0
+        self.m = 0
 
     def insert(self, u, vector):
         self.degrees[u] = len(vector)
         self.total_deg += len(vector)
+        self.m += 1
 
     def get_order(self):
         ordering = [0 for _ in range(self.n_nodes)]
@@ -21,6 +26,9 @@ class HubSorting:
         for i, non_hub in enumerate(non_hubs):
             ordering[n_hubs + i] = non_hub
         return ordering
+
+    def get_operation_count(self):
+        return math.floor(self.m + self.n_nodes * math.log(self.n_nodes, 2))
 
 
 

@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class EgoFacebookGraph:
+class ReadGraph:
     def __init__(self, path):
         self.adj_dict = defaultdict(lambda: [])
         for line in open(path, 'r'):
