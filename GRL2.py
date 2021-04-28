@@ -5,6 +5,7 @@ import sys
 
 class GRL2:
     def __init__(self, n_nodes, seed=100):
+        print("N_nodes:", n_nodes)
         self.n_nodes = n_nodes
         self.hasher1 = Hash(sys.maxsize, seed=seed)
         self.hasher2 = Hash(sys.maxsize, seed=seed * 2)
@@ -33,6 +34,7 @@ class GRL2:
         print("Unique min hash1 used:", len(self.min_hash1_used))
         print("Unique min hash2 used:", len(self.min_hash2_used))
         s = numpy.array(self.order_arr)
+        print("length of ordering:", len(s))
         sort_index = numpy.argsort(s)
         return sort_index
 
